@@ -1,0 +1,139 @@
+<div class="dashboard-shell">
+  <mat-card class="dashboard-card">
+    <mat-card-header>
+      <div class="dashboard-header">
+        <div>
+          <mat-card-title>Pedidos</mat-card-title>
+          <mat-card-subtitle>Cadastre usuários, clientes, produtos e registre pedidos</mat-card-subtitle>
+        </div>
+        <button mat-stroked-button color="warn" type="button" (click)="logout()">Sair</button>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="sections-grid">
+        <section class="section-card">
+          <h3>Usuários</h3>
+          <form [formGroup]="userForm" (ngSubmit)="createUser()">
+            <mat-form-field appearance="outline">
+              <mat-label>Nome</mat-label>
+              <input matInput formControlName="name" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Usuário</mat-label>
+              <input matInput formControlName="username" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Senha</mat-label>
+              <input matInput type="password" formControlName="password" />
+            </mat-form-field>
+
+            <button mat-flat-button color="primary" type="submit">Cadastrar usuário</button>
+          </form>
+        </section>
+
+        <section class="section-card">
+          <h3>Clientes</h3>
+          <form [formGroup]="clientForm" (ngSubmit)="createClient()">
+            <mat-form-field appearance="outline">
+              <mat-label>Nome</mat-label>
+              <input matInput formControlName="name" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>CPF</mat-label>
+              <input matInput formControlName="cpf" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Telefone</mat-label>
+              <input matInput formControlName="phoneNumber" />
+            </mat-form-field>
+
+            <button mat-flat-button color="primary" type="submit">Cadastrar cliente</button>
+          </form>
+        </section>
+
+        <section class="section-card">
+          <h3>Produtos</h3>
+          <form [formGroup]="productForm" (ngSubmit)="createProduct()">
+            <mat-form-field appearance="outline">
+              <mat-label>Descrição</mat-label>
+              <input matInput formControlName="description" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Valor</mat-label>
+              <input matInput type="number" formControlName="value" />
+            </mat-form-field>
+
+            <button mat-flat-button color="primary" type="submit">Cadastrar produto</button>
+          </form>
+        </section>
+
+        <section class="section-card">
+          <h3>Pedidos</h3>
+          <form [formGroup]="orderForm" (ngSubmit)="createOrder()">
+            <mat-form-field appearance="outline">
+              <mat-label>Cliente</mat-label>
+              <mat-select formControlName="clientId">
+                @for (client of clients; track client.id) {
+                  <mat-option [value]="client.id">{{ client.name }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Produtos</mat-label>
+              <mat-select formControlName="products" multiple>
+                @for (product of products; track product.id) {
+                  <mat-option [value]="product.id">{{ product.description }} - R$ {{ product.value | number: '1.2-2' }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Descrição</mat-label>
+              <input matInput formControlName="description" />
+            </mat-form-field>
+
+            <button mat-flat-button color="accent" type="submit">Registrar pedido</button>
+          </form>
+
+          <div class="orders-panel">
+            <h4>Pedidos registrados</h4>
+            <div class="orders-search">
+              <mat-form-field appearance="outline">
+                <mat-label>IDs dos pedidos</mat-label>
+                <input matInput [(ngModel)]="orderIdsInput" name="orderIdsInput" placeholder="Ex.: 1, 2, 3" />
+              </mat-form-field>
+              <button mat-stroked-button color="primary" type="button" (click)="loadOrdersByIds()">Buscar</button>
+            </div>
+
+            @if (orders.length) {
+              <div class="orders-list">
+                @for (order of orders; track order.id) {
+                  <div class="order-card">
+                    <div class="order-item">
+                      <strong>#{{ order.id }}</strong>
+                      <span>Cliente: {{ order.clientName ?? 'Não informado' }}</span>
+                      <span>Data: {{ order.emissionDate | date:'dd/MM/yyyy HH:mm' }}</span>
+                      <span>Produtos: {{ order.productNames?.join(', ') || 'Nenhum' }}</span>
+                      <span>Itens: {{ order.itemDetails?.join(' | ') || 'Nenhum item' }}</span>
+                      <span>Descrição: {{ order.description || 'Sem descrição' }}</span>
+                      <span>Total: {{ order.total | currency:'BRL' }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+            } @else {
+              <p>Nenhum pedido encontrado.</p>
+            }
+          </div>
+        </section>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

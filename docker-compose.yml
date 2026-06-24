@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: galleriabank-postgres
+    environment:
+      POSTGRES_DB: galleriabank
+      POSTGRES_USER: galleriabank
+      POSTGRES_PASSWORD: galleriabank
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: galleriabank-backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+      DATABASE_URL: jdbc:postgresql://postgres:5432/galleriabank
+      DATABASE_USERNAME: galleriabank
+      DATABASE_PASSWORD: galleriabank
+
+  frontend:
+    build: ./frontend
+    container_name: galleriabank-frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

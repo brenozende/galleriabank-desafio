@@ -1,0 +1,21 @@
+.login-container {
+  max-width: 420px;
+  margin: 80px auto;
+  padding: 24px;
+}
+
+.login-container mat-card {
+  padding: 8px 0;
+}
+
+.login-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.divider {
+  text-align: center;
+  margin: 16px 0 8px;
+  color: #666;
+}
