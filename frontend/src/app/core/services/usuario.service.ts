@@ -12,7 +12,12 @@ export class UsuarioService {
   private readonly authService = inject(AuthService);
 
   private getAuthHeaders(): HttpHeaders {
-    return new HttpHeaders({ Authorization: `Bearer ${this.authService.getToken() ?? ''}` });
+    const token = this.authService.getToken();
+
+    if (!token) {
+      return new HttpHeaders();
+    }
+    return new HttpHeaders({ Authorization: `Bearer ${token}` });
   }
 
   list(): Observable<Usuario[]> {
