@@ -24,9 +24,9 @@ O projeto é composto por:
 
 # Executando a aplicação com Docker
 
-A forma mais simples de executar o projeto é utilizando Docker Compose.
+A aplicação pode ser executada de forma totalmente automatizada utilizando Docker Compose.
 
-Na raiz do projeto:
+Na raiz do projeto, execute:
 
 ```bash
 docker compose up --build
